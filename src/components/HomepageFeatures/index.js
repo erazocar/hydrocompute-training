@@ -17,7 +17,7 @@ const FeatureList = [
     Svg: require('@site/static/img/focus.svg').default,
     description: (
       <>
-       Scale your environmental simulations with ease using HydroCompute's cutting-edge tech.
+       HydroCompute enables users to leverage cutting edge technologies for faster and better web apps.
       </>
     ),
   },

@@ -23,7 +23,7 @@ This lesson space serves as an introduction to the use of **HydroCompute**, a cl
 
 ## Syllabus
 
-- **[Introduction](../docs/intro.md)**: Learn about HydroCompute architecture, and open-source nature.
+- **[Introduction](../docs/intro.mdx)**: Learn about HydroCompute architecture, and open-source nature.
 - **[Multithreading](../docs/tutorial/multithread)**: Learn about running parallel and sequential tasks through the use of web worker technologies.
 - **[Engines](../docs/tutorial/engines)**: Learn how to run code from different sources and programming languages and port them into a common ground for web usage..
 - **[Case Studies](../docs/tutorial/_category_.json)**: Learn about the development of a case study evaluating speed and using different libraries for development.

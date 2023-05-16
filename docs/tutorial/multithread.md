@@ -26,7 +26,11 @@ Multithreading on web assembly is quite the task to do and is not fully supporte
 The predecessor to WebGPU, WebGL, is (was) the usual way to port GPU-intensive workloads into the web. Now, WebGPU's friendly API allows for more scalable applications.
 :::
 
-HydroCompute enables these technologies through the combination of web workers and scripts written in different programming languages (WebAssembly C and AssemblyScript, WebGPU WGSL, and JavaScript). This is done through task scheduling and execution using directed acyclic graphs to span multiple workers at the same time, as well as switching between engines.
+HydroCompute enables these technologies through the combination of web workers and scripts written in different programming languages (WebAssembly C and AssemblyScript, WebGPU WGSL, and JavaScript).
+
+:::tip Tip
+More about web based multithreading can be found [here](https://web.dev/off-main-thread/).
+:::
 
 
 

@@ -1,0 +1,60 @@
+---
+sidebar_position: 2
+---
+
+import func from '../../static/img/function_simulation.png'
+import step from '../../static/img/step_simulation.png'
+
+
+# Scheduler
+
+The HydroCompute library was developed with the goal of supporting simulations that require executing N steps with M functions within each step. It provides flexibility in how data is passed to functions within each step, allowing for the use of the same data, different data, or results from previous functions.
+
+The core engine of HydroCompute manages the execution of steps and functions by leveraging a thread manager to run computations in parallel or sequentially. Here's an overview of the parameters used:
+
+- `functions`: An array of functions to be executed in each step.
+- `funcArgs`: An array of arguments for each function in each step.
+- `dependencies`: An array specifying the dependencies between functions in each step.
+- `linked`: A boolean indicating whether the results from the previous step should be used in subsequent steps.
+- `data`: An array of data arrays to be used in each step.
+- `length`: An array specifying the length of the data submitted for analysis in each step.
+- `isSplit`: An array indicating whether data splits should be performed in each step.
+- `scriptName`: An array of script names used in the passed arguments.
+
+The arguments given by each step depend on the definiton that the user is providing at the moment of running and are used within the scheduler as is.
+
+## Functions
+
+Functions within steps can be run in a connected or disconnected manner. The run() method in HydroCompute handles various arguments and configurations to support stepwise execution.
+
+<p align="center">
+<img src={func} alt="function-execution" width="300"/>
+</p>
+
+A single step runs using the following schema:
+
+```js
+compute.run({functions: [function1, function2], //additional args})
+```
+
+## Steps
+
+Steps in HydroCompute can be linked or independent. Linked steps indicate that the results from one step are used to execute the next step. To configure a simulation with stepwise execution, you need to define the simulation configuration using array objects.
+
+<p align="center">
+<img src={step} alt="function-execution" width="200"/>
+</p>
+
+For example, a definiton of 2 steps would look like this:
+
+```js
+compute.run({functions: [[function1, function2], [function1, function2]], //additional args})
+```
+
+:::note Note
+Default configuration is that the steps are not linked.
+:::
+
+:::tip Tip
+More about graph scheduling [here](https://link.springer.com/referenceworkentry/10.1007/978-0-387-09766-4_42).
+:::

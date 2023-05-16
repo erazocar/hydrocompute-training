@@ -31,7 +31,7 @@ export default function Home() {
   return (
     <Layout
       title={`${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />">
+      description="Tutorial for the HydroCompute library.">
       <HomepageHeader />
       <main>
         <HomepageFeatures />

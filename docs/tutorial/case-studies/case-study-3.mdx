@@ -1,0 +1,183 @@
+---
+sidebar_position: 3
+---
+
+# Case Study 3: Statistical forecasting
+
+Using the HydroLang library coupled with the HydroCompute library, let's create a simple dashboard that retrieves all the stations from a particular area and does statistical forecasting on the dataset given the time window and display the results of both the retrieved data and the simulations on a graph.
+
+## Objectives
+
+This case study aims to show the capability to create powerful applications using pipelines that can run in paralell or sequentially to analyze real time data sources using the HydroCompute library. We will be creating an online application that retrieves stations from a USGS Daily Values from a bounding box within the Salt Lake City Area, and we will run simulations for montecarlo and arima processes as we as simple and exponential moving averages over the data.
+
+## Data Preparation
+
+For this study, we will be modifying an application created using HydroLang that which a simple dashboard that retrieves and visualizes information from particular stations in the Salt Lake City area.
+
+<br></br>
+
+<iframe
+  src="https://codesandbox.io/embed/case-study-1-dimbnw?codemirror=1&fontsize=14&hidenavigation=1&theme=light"
+  width="100%"
+  height="300px"
+  border="0"
+  border-radius="4px"
+  title="case-study-1"
+  allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+  sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+></iframe>
+
+The body of our application will be modified by adding a chart div so we can visualize the results from the compute pipeline as follows:
+
+```html
+<body>
+  <div id="map"></div>
+  <div id="overlay">
+    <div id="content">
+      <div id="retrieved-data"></div>
+      <div id="result-graph"></div>
+      //Visualize graph
+      <div id="stats-table"></div>
+      <button id="download-raw-btn">Download Data</button>
+      <button id="download-simulationRes-btn">
+        Download Simulation Results</button
+      >//Attach the simulation results
+    </div>
+  </div>
+</body>
+```
+
+## Setting up the Pipeline
+
+Let's start by defining what we will want to observe from the retrieved data. In particular, since we are talking about time series information, it would be good to see how forecasting models and moving averages work with the retrived information.
+
+Define the functions that we want to run as follows:
+
+```js
+let jsFuns = ["expoMovingAverage_js", "simpleMovingAverage_js"];
+let cFuns1 = ["_monteCarlo_c", "_arima_autoParams"];
+let cFuns2 = [
+  "_arima_autoParams",
+  "_linear_detrend",
+  "_monteCarlo_c",
+  "_linear_detrend",
+];
+```
+
+We will run the first two sets of functions in parallel, while the last one will run sequentially trailing down results.
+
+For doing this, let's create new function that will use the downloaded data as inputs for all the simulations.
+
+```js
+async function computeRun(site, data) {
+  //Removing the date values and leaving only the results
+  data = data[1].slice(1);
+
+  //resetting the result spaces in the engine
+  compute.availableData = [];
+  compute.engineResults = {};
+  compute.instanceRun = 0;
+
+  //saving the results inside the compute library
+  compute.data({ id: site, data });
+  let jsFuns = ["expoMovingAverage_js", "simpleMovingAverage_js"];
+  let cFuns1 = ["_monteCarlo_c", "_arima_autoParams"];
+  let cFuns2 = [
+    "_arima_autoParams",
+    "_linear_detrend",
+    "_monteCarlo_c",
+    "_linear_detrend",
+  ];
+  //...
+}
+```
+
+## Running the Simulation
+
+Inside the `computeRun` function, let's run the different simulations as follows:
+
+```js
+async function computeRun(site, data) {
+  //...
+  compute.setEngine("wasm");
+
+  await compute.run({
+    functions: cFuns1,
+  });
+
+  await compute.run({
+    functions: cFuns2,
+    dependencies: true,
+  });
+
+  compute.setEngine("javascript");
+
+  await compute.run({
+    functions: jsFuns,
+  });
+
+  //...
+}
+```
+
+We switch the engine that we are running at the middle of the simulation. For the results dependent on each other, we add the `true` flag to the dependencies. Once the simulations have finished, we need to do some data manipulation before we can visualize them in a graph. We add inside the function:
+
+```js
+async function computeRun(site, data) {
+  //Result holders
+  let return_Values = [];
+  let return_Names = [];
+
+  //Retrieving each of the simulation runs
+  let results1 = compute.results("Simulation_1")[0];
+  let results2 = compute.results("Simulation_2")[0];
+  let results3 = compute.results("Simulation_3")[0];
+
+  //cleaning up some Infinity, NaN, and null values
+  for (let i = 0; i < results1.functions.length; i++) {
+    return_Values.push(compute.utils.cleanArray(results1.results[i]));
+    return_Names.push(results1.functions[i]);
+  }
+
+  //Same for results 2 and 3
+
+  return [return_Values, return_Names];
+}
+```
+
+## Visualizing Results
+
+We need to call the newly created function inside the `retrieveValues` function and attach the results to the graph and download button.
+
+```js
+async function retrieveValues(site) {
+    //We add a new button
+  let button2 = document.getElementById("download-simulationRes-btn");
+
+  //...
+
+  //After the results have been downloaded, we call the computeRun function
+  let [results, fun_names] = await computeRun(site, await usgs_data);
+
+  //Reattach the date values to the result array
+  results.unshift(usgs_data[0]);
+
+  //Graph the results
+  hydro.visualize.draw({
+    params: { type: "chart", id: "result-graph" },
+    args: { names: fun_names },
+    data: results,
+  });
+
+  //...
+
+  //Attach the values from the simulations to the button for donwloading
+  button2.removeAttribute("hidden");
+  button2.addEventListener("click", () => {
+    hydro.data.download({ args: { type: "CSV" }, data: results });
+  });
+  showOverlay();
+}
+```
+
+With this, we are able to see the modified version of our dashboard which now contains a powerful way to visaulize results from functions running on the background using the hydroCompute library.
