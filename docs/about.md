@@ -1,5 +1,5 @@
 ---
-sidebar_position: 1
+sidebar_position: 2
 ---
 
 # About this lesson
@@ -23,9 +23,10 @@ This lesson space serves as an introduction to the use of **HydroCompute**, a cl
 
 ## Syllabus
 
-- **[Introduction](../docs/intro.mdx)**: Learn about HydroCompute architecture, and open-source nature.
+- **[Data](../docs/tutorial/data.md)**: Learn about how to feed data into the HydroCompute library.
 - **[Multithreading](../docs/tutorial/multithread)**: Learn about running parallel and sequential tasks through the use of web worker technologies.
-- **[Engines](../docs/tutorial/engines)**: Learn how to run code from different sources and programming languages and port them into a common ground for web usage..
+- **[Scheduler](../docs/tutorial/scheduler)**: Learn about the underlying mechanisms implemented for scheduling tasks.
+- **[Engines](../docs/tutorial/engines)**: Learn how to run code from different sources and programming languages and port them into a common ground for web usage.
 - **[Case Studies](../docs/tutorial/_category_.json)**: Learn about the development of a case study evaluating speed and using different libraries for development.
 
 :::caution Caution

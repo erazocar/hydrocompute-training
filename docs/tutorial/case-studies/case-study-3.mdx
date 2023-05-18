@@ -2,7 +2,7 @@
 sidebar_position: 3
 ---
 
-# Case Study 3: Statistical forecasting
+# Case Study 3: Dashboard for Station Statistical Analysis
 
 Using the HydroLang library coupled with the HydroCompute library, let's create a simple dashboard that retrieves all the stations from a particular area and does statistical forecasting on the dataset given the time window and display the results of both the retrieved data and the simulations on a graph.
 
@@ -81,13 +81,8 @@ async function computeRun(site, data) {
   //saving the results inside the compute library
   compute.data({ id: site, data });
   let jsFuns = ["expoMovingAverage_js", "simpleMovingAverage_js"];
-  let cFuns1 = ["_monteCarlo_c", "_arima_autoParams"];
-  let cFuns2 = [
-    "_arima_autoParams",
-    "_linear_detrend",
-    "_monteCarlo_c",
-    "_linear_detrend",
-  ];
+  let cFuns1 = ['_monteCarlo_c', '_arima_autoParams'];
+  let cFuns2 = ['_linear_detrend', '_arima_autoParams', '_monteCarlo_c'];
   //...
 }
 ```
