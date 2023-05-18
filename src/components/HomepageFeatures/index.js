@@ -8,7 +8,7 @@ const FeatureList = [
     Svg: require('@site/static/img/easy-to-use.svg').default,
     description: (
       <>
-         Streamline your hydrological computations with HydroCompute's user-friendly API.
+         Streamlining workflows through a semantic API.
       </>
     ),
   },

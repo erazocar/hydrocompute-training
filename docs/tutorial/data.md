@@ -56,5 +56,5 @@ compute.engineResults: {
 ```
 
 :::tip Tip
-More about the data requirments [here](https://github.com/uihilab/HydroCompute/tree/main)
+More about the data requirements [here](https://github.com/uihilab/HydroCompute/tree/main)
 :::

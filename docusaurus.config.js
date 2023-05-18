@@ -7,7 +7,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'HydroCompute',
-  tagline: 'CIROH Developers Conference 2022',
+  tagline: 'CIROH Developers Conference 2023',
   favicon: 'img/uihilab.png',
 
   // Set the production url of your site here
